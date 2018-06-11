@@ -124,6 +124,7 @@ public class SybaseDAO {
 
 			ps.executeUpdate();
 			ps.close();
+			con.commit();//hmm
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
