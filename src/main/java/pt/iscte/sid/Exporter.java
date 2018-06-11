@@ -65,10 +65,25 @@ public class Exporter{
 			}else if(Integer.valueOf(propertiesAtributes[4])>65535 && Integer.valueOf(propertiesAtributes[4])<0) {
 				System.out.println("Reconfigurar.");
 				return false;
-			}else if(Integer.valueOf(propertiesAtributes[7])<0) {
+			}else if(Integer.valueOf(propertiesAtributes[7])>65535 && Integer.valueOf(propertiesAtributes[7])<0) {
+				System.out.println("Reconfigurar.");
+				return false;
+			}else if(Integer.valueOf(propertiesAtributes[10])<0) {
 				System.out.println("Reconfigurar.");
 				return false;
 			}else if((propertiesAtributes[11].length() - propertiesAtributes[11].replace(".", "").length())!=3) {
+				System.out.println("Reconfigurar.");
+				return false;
+			}else if((propertiesAtributes[3].length() - propertiesAtributes[3].replace(".", "").length())!=3) {
+				System.out.println("Reconfigurar.");
+				return false;
+			}else if(propertiesAtributes[8].length()==0) {
+				System.out.println("Reconfigurar.");
+				return false;
+			}else if(propertiesAtributes[2].length()==0) {
+				System.out.println("Reconfigurar.");
+				return false;
+			}else if(propertiesAtributes[9].length()==0) {
 				System.out.println("Reconfigurar.");
 				return false;
 			}
@@ -166,7 +181,7 @@ public class Exporter{
 			sybase.disconnect(con);
 			mongo.disconnect(mongoclient);
 		}catch(MongoTimeoutException e) {
-			System.out.println("Não existe ligacao ao mongo.");
+			System.out.println("Nï¿½o existe ligacao ao mongo.");
 		}catch(NullPointerException f) {
 			System.out.println("Nao existe ligacao ao sybase.");
 			f.printStackTrace();
