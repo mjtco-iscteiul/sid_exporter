@@ -40,16 +40,9 @@ public class SybaseDAO {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT MAX(DataInicio) FROM DataMigracao WHERE DataFim IS NOT NULL;");
             while(rs.next()) {
-                System.out.println("COLLUM COUNT: " + rs.getMetaData().getColumnCount());
-                System.out.println("COLLUM NAME: " + rs.getMetaData().getColumnName(1));
-                System.out.println("I NEED TO ENTER HERE!!!!!");
                 try {
                     time = (int) rs.getTimestamp(1).toInstant().getEpochSecond();
-                    System.out.println("-> " + rs.getTimestamp(1));
-                    System.out.println("---> " + rs.getTimestamp(1).toInstant());
-                    System.out.println("-----> " + rs.getTimestamp(1).toInstant().getEpochSecond());
                 } catch(NullPointerException e) {
-                    System.out.println("OMGGGGGGGGGGGGG");
                     rs.close();
                     stmt.close();
                 }
@@ -58,8 +51,7 @@ public class SybaseDAO {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("OMGGGGGGGGGGGGG v222222");
-            e.printStackTrace();
+            System.out.println("First Migration Started.");
         }
         return time;
     }

@@ -170,8 +170,9 @@ public class Exporter{
 
     public static void main( String args[] ){
         Exporter exportador = new Exporter();
+        MakeMigration migration = new MakeMigration(exportador);
         Timer timer = new Timer();
-        timer.schedule(new MakeMigration(exportador), 0, 1000 * exportador.getPeriodicity());
+        timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
         try {
             WatchService watchService =FileSystems.getDefault().newWatchService();
             String dir = System.getProperty("user.dir");
@@ -182,9 +183,9 @@ public class Exporter{
                 for (WatchEvent<?> event : key.pollEvents()) {
                     timer.cancel();
                     exportador = new Exporter();
-                    // migration = new MakeMigration(exportador);
+                    migration = new MakeMigration(exportador);
                     timer = new Timer();
-                    // timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
+                    timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
                 }
             }
             key.reset();
