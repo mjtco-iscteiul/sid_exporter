@@ -17,7 +17,7 @@ public class MongoDAO {
 	public MongoClient connect(String[] properties, boolean valid) {
 		MongoClient mongoClient = null;
 		if(valid) {
-			String connection = "mongodb://"+properties[2]+":"+properties[0]+"@"+properties[6]+":"+properties[1]+"/SensorData";
+			String connection = "mongodb://"+properties[5]+":"+properties[0]+"@"+properties[3]+":"+properties[7]+"/"+properties[9];
 			mongoClient = MongoClients.create(connection);
 		}else {
 			mongoClient = MongoClients.create("mongodb://UExportador:exportador@172.17.1.245:27017/SensorData");
@@ -32,7 +32,7 @@ public class MongoDAO {
 	public MongoDatabase databaseConnect(MongoClient mongoClient, String[] properties, boolean valid) {
 		MongoDatabase database = null;
 		if(valid) {
-			database = mongoClient.getDatabase(properties[4]);
+			database = mongoClient.getDatabase(properties[9]);
 		}else {
 			database = mongoClient.getDatabase("SensorData");
 		}
@@ -42,7 +42,7 @@ public class MongoDAO {
 	public FindIterable<Document> getRecentResults(MongoDatabase database, BSONTimestamp timestamp, BSONTimestamp timestampAtual, String[] properties, boolean valid) {
 		FindIterable<Document> all = null;
 		if(valid) {
-			MongoCollection<Document> collection = database.getCollection(properties[5]);
+			MongoCollection<Document> collection = database.getCollection(properties[8]);
 			all = collection.find(and(gt("created_at", timestamp),lte("created_at", timestampAtual)));
 		}else {
 			MongoCollection<Document> collection = database.getCollection("humidityTemperature");

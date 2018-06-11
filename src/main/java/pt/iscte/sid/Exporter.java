@@ -30,19 +30,25 @@ public class Exporter{
 	public Exporter() {
 		readConfig();
 		/*
-		 * 0-pw
-		 * 1-port
-		 * 2-user
-		 * 3-periodicidade da migracao
-		 * 4-database
-		 * 5-collection
-		 * 6-ip
+		 * 0-MongodbPass
+		 * 1-SybasePass
+		 * 2-SybaseDatabase
+		 * 3-MongoIp
+		 * 4-SybasePort
+		 * 5-MongodbUser
+		 * 6-SybaseUser
+		 * 7-MongoPort
+		 * 8-MongoCollection
+		 * 9-MongoDatabase
+		 * 10-MigrationFreq
+		 * 11-SybaseIp
+		 * 
 		 */
 	}
 
 	public int getPeriodicity() {
 		if(validateConfig(propertiesAtributes)!=false) {
-			return Integer.valueOf(propertiesAtributes[3]);
+			return Integer.valueOf(propertiesAtributes[10]);
 		}else {
 			return 5;
 		}
@@ -53,16 +59,16 @@ public class Exporter{
 			if(propertiesAtributes.equals(null)) {
 				System.out.println("Reconfigurar.");
 				return false;
-			}else if(propertiesAtributes.length != 7) { // falta adicionar o user do sybase
+			}else if(propertiesAtributes.length != 12) {
 				System.out.println("Reconfigurar.");
 				return false;
-			}else if(Integer.valueOf(propertiesAtributes[1])>65535 && Integer.valueOf(propertiesAtributes[1])<0) {
+			}else if(Integer.valueOf(propertiesAtributes[4])>65535 && Integer.valueOf(propertiesAtributes[4])<0) {
 				System.out.println("Reconfigurar.");
 				return false;
-			}else if(Integer.valueOf(propertiesAtributes[3])<0) {
+			}else if(Integer.valueOf(propertiesAtributes[7])<0) {
 				System.out.println("Reconfigurar.");
 				return false;
-			}else if((propertiesAtributes[6].length() - propertiesAtributes[6].replace(".", "").length())!=3) {
+			}else if((propertiesAtributes[11].length() - propertiesAtributes[11].replace(".", "").length())!=3) {
 				System.out.println("Reconfigurar.");
 				return false;
 			}
@@ -107,7 +113,7 @@ public class Exporter{
 			MongoDAO mongo = new MongoDAO();
 
 			//CONNECTORS
-			Connection con = sybase.connect();
+			Connection con = sybase.connect(propertiesAtributes, validateConfig(propertiesAtributes));
 
 
 			MongoClient mongoclient = mongo.connect(propertiesAtributes, validateConfig(propertiesAtributes));
