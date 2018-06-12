@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Timer;
 
+import it.sauronsoftware.junique.AlreadyLockedException;
+import it.sauronsoftware.junique.JUnique;
 import org.bson.Document;
 import org.bson.types.BSONTimestamp;
 
@@ -28,7 +30,8 @@ import com.mongodb.client.MongoDatabase;
 public class Exporter{
 
 	private String[] propertiesAtributes = null;
-	private static final String CONFIG_DIR = System.getProperty("user.dir")+File.separator+"config.properties";
+	private static final String CONFIG_DIR = System.getProperty("user.dir") + File.separator + "config.properties";
+    private static final String ID = "879cd1e8-e037-4337-8d40-4a886b4f3b95";
 
 	public Exporter() {
 		readConfig();
@@ -194,28 +197,41 @@ public class Exporter{
 	}
 
     public static void main( String args[] ){
-        Exporter exportador = new Exporter();
-        MakeMigration migration = new MakeMigration(exportador);
-        Timer timer = new Timer();
-        timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
+        boolean alreadyRunning;
         try {
-            WatchService watchService =FileSystems.getDefault().newWatchService();
-            String dir = System.getProperty("user.dir");
-            Path path = Paths.get(dir);
-            path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-            WatchKey key;
-            while ((key = watchService.take()) != null) {
-                for (WatchEvent<?> event : key.pollEvents()) {
-                    timer.cancel();
-                    exportador = new Exporter();
-                    migration = new MakeMigration(exportador);
-                    timer = new Timer();
-                    timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
+            JUnique.acquireLock(ID, message -> {
+                System.out.println("Application already running!");
+                return "Application already running!";
+            });
+            alreadyRunning = false;
+        } catch (AlreadyLockedException e) {
+            alreadyRunning = true;
+        }
+
+        if (!alreadyRunning) {
+            Exporter exportador = new Exporter();
+            MakeMigration migration = new MakeMigration(exportador);
+            Timer timer = new Timer();
+            timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
+            try {
+                WatchService watchService =FileSystems.getDefault().newWatchService();
+                String dir = System.getProperty("user.dir");
+                Path path = Paths.get(dir);
+                path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+                WatchKey key;
+                while ((key = watchService.take()) != null) {
+                    for (WatchEvent<?> event : key.pollEvents()) {
+                        timer.cancel();
+                        exportador = new Exporter();
+                        migration = new MakeMigration(exportador);
+                        timer = new Timer();
+                        timer.schedule(migration, 0, 1000 * exportador.getPeriodicity());
+                    }
                 }
+                key.reset();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
             }
-            key.reset();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }
