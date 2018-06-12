@@ -141,7 +141,8 @@ public class Exporter{
 			sybase.inicioMigracao(con);
 			BSONTimestamp timestamp = new BSONTimestamp(sybase.selectRecentDate(con), 1);
 			BSONTimestamp timestampAtual = new BSONTimestamp(sybase.selectCurrentDate(con), 1);
-			System.out.println(timestamp);System.out.println(timestampAtual);
+			System.out.println(timestamp);
+			System.out.println(timestampAtual);
 
 			//VAI BUSCAR AO MONGO DADOS APOS A DATA E TEMPO QUE PASSO
 			FindIterable<Document> dadosRecebidosMongo = mongo.getRecentResults(database,timestamp,timestampAtual,propertiesAtributes, validateConfig(propertiesAtributes));
@@ -160,19 +161,17 @@ public class Exporter{
 				if(flag) {
 					ps = sybase.createStatement(con, DataMedicao, HoraMedicao, ValorMedicaoTemperatura, ValorMedicaoHumidade);
 					flag = false;
-				}else {
+				} else {
 					sybase.prepareInsert(ps, DataMedicao, HoraMedicao, ValorMedicaoTemperatura, ValorMedicaoHumidade);
-					sucess = true;
 				}
 			}
 
 			try {
 				if(dadosRecebidosMongo.first() != null) {
 					sybase.executeStatement(ps);
-				}else {
-					sucess = true;
 				}
-			}catch(SQLException e) {
+				sucess = true;
+			} catch(SQLException e) {
 				sucess = false;
 			}
 
