@@ -25,7 +25,7 @@ import com.mongodb.client.MongoDatabase;
 public class Exporter{
 
 	private String[] propertiesAtributes = null;
-	private static final String CONFIG_DIR = System.getProperty("user.dir")+"\\config.properties";
+	private static final String CONFIG_DIR = System.getProperty("user.dir")+File.separator+"config.properties";
 
 	public Exporter() {
 		readConfig();
