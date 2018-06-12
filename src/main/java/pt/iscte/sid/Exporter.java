@@ -1,3 +1,6 @@
+package pt.iscte.sid;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +28,7 @@ import com.mongodb.client.MongoDatabase;
 public class Exporter{
 
 	private String[] propertiesAtributes = null;
-	private static final String CONFIG_DIR = System.getProperty("user.dir")+"\\config.properties";
+	private static final String CONFIG_DIR = System.getProperty("user.dir") + File.pathSeparator + "config.properties";
 
 	public Exporter() {
 		readConfig();
@@ -181,7 +184,7 @@ public class Exporter{
 			sybase.disconnect(con);
 			mongo.disconnect(mongoclient);
 		}catch(MongoTimeoutException e) {
-			System.out.println("N�o existe ligacao ao mongo.");
+			System.out.println("Nao existe ligacao ao mongo.");
 		}catch(NullPointerException f) {
 			System.out.println("Nao existe ligacao ao sybase.");
 			f.printStackTrace();
@@ -201,7 +204,7 @@ public class Exporter{
 			String dir = System.getProperty("user.dir");
 			System.out.println(dir);
 			Path path = Paths.get(dir); 
-			WatchKey watchKey = path.register( watchService, StandardWatchEventKinds.ENTRY_MODIFY); 
+			path.register( watchService, StandardWatchEventKinds.ENTRY_MODIFY);
 			WatchKey key; 
 			while ((key = watchService.take()) != null) { 
 				for (WatchEvent<?> event : key.pollEvents()) { 

@@ -1,3 +1,5 @@
+package pt.iscte.sid;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,18 +12,20 @@ public class SybaseDAO {
 	public Connection connect(String[] properties, boolean valid) {
 		String arg = "jdbc4";
 		if(valid) {
-		try {
-			Connection con = DriverManager.getConnection("jdbc:sqlanywhere:uid="+properties[6]+";pwd="+properties[1]+";eng="+properties[2]+";host="+properties[11]+":"+properties[4]);
-			System.out.println("Using "+arg+" driver");
-			con.setTransactionIsolation(sap.jdbc4.sqlanywhere.IConnection.SA_TRANSACTION_SNAPSHOT);//SET OPTION PUBLIC.allow_snapshot_isolation = 'On'; <- SQL ANYWHERE
-			con.setAutoCommit(false);
-			return con;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}}else {
 			try {
-				Connection con = DriverManager.getConnection("jdbc:sqlanywhere:uid=G29;pwd=123456;eng=G292DB;host=172.17.15.142:2638");
+				Connection con = DriverManager.getConnection("jdbc:sqlanywhere:uid="+properties[6]+";pwd="+properties[1]+";eng="+properties[2]+";host="+properties[11]+":"+properties[4]);
+				System.out.println("Using "+arg+" driver");
+				con.setTransactionIsolation(sap.jdbc4.sqlanywhere.IConnection.SA_TRANSACTION_SNAPSHOT);//SET OPTION PUBLIC.allow_snapshot_isolation = 'On'; <- SQL ANYWHERE
+				con.setAutoCommit(false);
+				return con;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				System.out.println("ENTRO NESTE PAH!!!");
+				Connection con = DriverManager.getConnection("jdbc:sqlanywhere:uid=G29;pwd=123456;eng=G292DB;host=127.0.0.1:2638");
 				System.out.println("Using "+arg+" driver");
 				con.setTransactionIsolation(sap.jdbc4.sqlanywhere.IConnection.SA_TRANSACTION_SNAPSHOT);//SET OPTION PUBLIC.allow_snapshot_isolation = 'On'; <- SQL ANYWHERE
 				con.setAutoCommit(false);
@@ -124,7 +128,6 @@ public class SybaseDAO {
 
 			ps.executeUpdate();
 			ps.close();
-			con.commit();//hmm
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
