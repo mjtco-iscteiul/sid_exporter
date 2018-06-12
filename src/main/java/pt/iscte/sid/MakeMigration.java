@@ -1,3 +1,5 @@
+package pt.iscte.sid;
+
 import java.util.TimerTask;
 
 public class MakeMigration extends TimerTask {

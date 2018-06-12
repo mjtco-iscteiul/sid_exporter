@@ -1,5 +1,6 @@
 package pt.iscte.sid;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,7 +184,7 @@ public class Exporter{
 			sybase.disconnect(con);
 			mongo.disconnect(mongoclient);
 		}catch(MongoTimeoutException e) {
-			System.out.println("N�o existe ligacao ao mongo.");
+			System.out.println("Nao existe ligacao ao mongo.");
 		}catch(NullPointerException f) {
 			System.out.println("Nao existe ligacao ao sybase.");
 			f.printStackTrace();

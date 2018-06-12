@@ -1,3 +1,5 @@
+package pt.iscte.sid;
+
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.gt;
 import static com.mongodb.client.model.Filters.lte;
